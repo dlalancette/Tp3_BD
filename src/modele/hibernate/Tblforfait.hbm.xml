@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-11-15 12:00:11 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="modele.hibernate.Tblforfait" table="TBLFORFAIT" schema="TRD157_23">
+        <id name="nomforfait" type="string">
+            <column name="NOMFORFAIT" length="50" />
+            <generator class="assigned" />
+        </id>
+        <property name="coutforfait" type="big_decimal">
+            <column name="COUTFORFAIT" precision="2" not-null="true" />
+        </property>
+        <property name="nblocmax" type="big_decimal">
+            <column name="NBLOCMAX" precision="22" scale="0" not-null="true" />
+        </property>
+        <property name="dureemax" type="string">
+            <column name="DUREEMAX" length="10" not-null="true" />
+        </property>
+        <set name="tblusagers" table="TBLUSAGER" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="NOMFORFAIT" length="50" />
+            </key>
+            <one-to-many class="modele.hibernate.Tblusager" />
+        </set>
+    </class>
+</hibernate-mapping>

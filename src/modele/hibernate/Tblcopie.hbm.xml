@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-11-15 12:00:11 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="modele.hibernate.Tblcopie" table="TBLCOPIE" schema="TRD157_23">
+        <id name="noseriecopie" type="string">
+            <column name="NOSERIECOPIE" length="20" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="tblfilm" class="modele.hibernate.Tblfilm" fetch="select">
+            <column name="IDFILM" precision="22" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="etatcopie" type="char">
+            <column name="ETATCOPIE" length="1" not-null="true" />
+        </property>
+        <set name="tbllocations" table="TBLLOCATION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="NOSERIECOPIE" length="20" not-null="true" />
+            </key>
+            <one-to-many class="modele.hibernate.Tbllocation" />
+        </set>
+    </class>
+</hibernate-mapping>

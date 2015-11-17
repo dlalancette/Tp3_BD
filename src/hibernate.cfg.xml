@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+        <property name="hibernate.connection.password">YDHmLDxudsyq</property>
+        <property name="hibernate.connection.url">jdbc:oracle:thin:@dim-oracle.uqac.ca:1521/dimdb.uqac.ca</property>
+        <property name="hibernate.connection.username">trd157_23</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
+        <property name="hibernate.search.autoregister_listeners">false</property>
+        <mapping resource="modele/hibernate/Tblforfait.hbm.xml" />
+        <mapping resource="modele/hibernate/Tblusager.hbm.xml" />
+        <mapping resource="modele/hibernate/Tblcopie.hbm.xml" />
+        <mapping resource="modele/hibernate/Tbllocation.hbm.xml" />
+        <mapping resource="modele/hibernate/Tblrole.hbm.xml" />
+        <mapping resource="modele/hibernate/Tblacteur.hbm.xml" />
+        <mapping resource="modele/hibernate/Tblscenariste.hbm.xml" />
+        <mapping resource="modele/hibernate/Tblemploye.hbm.xml" />
+        <mapping resource="modele/hibernate/Tblfilm.hbm.xml" />
+        <mapping resource="modele/hibernate/Tblrealisateur.hbm.xml" />
+        <mapping resource="modele/hibernate/Tblclient.hbm.xml" />
+        <mapping resource="modele/hibernate/Tblpaysproduction.hbm.xml" />
+        <mapping resource="modele/hibernate/Tblpersonnage.hbm.xml" />
+        <mapping resource="modele/hibernate/Tblgenre.hbm.xml" />
+        <mapping resource="modele/hibernate/VwAfficheclient.hbm.xml" />
+    </session-factory>
+</hibernate-configuration>
