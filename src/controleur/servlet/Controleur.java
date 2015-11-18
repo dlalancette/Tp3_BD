@@ -1,4 +1,4 @@
-package controleur;
+package controleur.servlet;
 import modele.hibernate.*;
 
 import java.math.BigDecimal;

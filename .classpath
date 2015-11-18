@@ -13,5 +13,21 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="lib" path="C:/Users/PPear/Java/TP3_LocationFilms/lib/antlr-2.7.6.jar"/>
+	<classpathentry kind="lib" path="C:/Users/PPear/Java/TP3_LocationFilms/lib/asm.jar"/>
+	<classpathentry kind="lib" path="C:/Users/PPear/Java/TP3_LocationFilms/lib/asm-attrs.jar"/>
+	<classpathentry kind="lib" path="C:/Users/PPear/Java/TP3_LocationFilms/lib/c3p0-0.9.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/PPear/Java/TP3_LocationFilms/lib/cglib-2.1.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/PPear/Java/TP3_LocationFilms/lib/commons-collections-2.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/PPear/Java/TP3_LocationFilms/lib/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/PPear/Java/TP3_LocationFilms/lib/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/PPear/Java/TP3_LocationFilms/lib/hibernate3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/PPear/Java/TP3_LocationFilms/lib/hibernate-tools.jar"/>
+	<classpathentry kind="lib" path="C:/Users/PPear/Java/TP3_LocationFilms/lib/hsqldb.jar"/>
+	<classpathentry kind="lib" path="C:/Users/PPear/Java/TP3_LocationFilms/lib/jta.jar"/>
+	<classpathentry kind="lib" path="C:/Users/PPear/Java/TP3_LocationFilms/lib/ocrs12.jar"/>
+	<classpathentry kind="lib" path="C:/Users/PPear/Java/TP3_LocationFilms/lib/ojdbc6.jar"/>
+	<classpathentry kind="lib" path="C:/Users/PPear/Java/TP3_LocationFilms/lib/ojdbc6dms.jar"/>
+	<classpathentry kind="lib" path="C:/Users/PPear/Java/TP3_LocationFilms/lib/orai18n.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
