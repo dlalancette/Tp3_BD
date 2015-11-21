@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-11-15 12:00:11 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="modele.Tblemploye" table="TBLEMPLOYE" schema="TRD157_23">
+        <id name="matriculeemp" type="big_decimal">
+            <column name="MATRICULEEMP" precision="22" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="tblusager" class="modele.Tblusager" fetch="select">
+            <column name="COURRIELUSAG" length="100" not-null="true" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

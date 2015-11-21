@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-11-15 12:00:11 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="modele.Tblfilm" table="TBLFILM" schema="TRD157_23">
+        <id name="idfilm" type="big_decimal">
+            <column name="IDFILM" precision="22" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="titrefilm" type="string">
+            <column name="TITREFILM" length="200" not-null="true" />
+        </property>
+        <property name="datesortiefilm" type="date">
+            <column name="DATESORTIEFILM" length="7" />
+        </property>
+        <property name="langueorigfilm" type="string">
+            <column name="LANGUEORIGFILM" length="10" />
+        </property>
+        <property name="dureefilm" type="big_decimal">
+            <column name="DUREEFILM" precision="4" />
+        </property>
+        <property name="resumefilm" type="string">
+            <column name="RESUMEFILM" />
+        </property>
+        <set name="tblgenres" table="TBLFILMGENRE" inverse="false" lazy="true" fetch="select">
+            <key>
+                <column name="IDFILM" precision="22" scale="0" not-null="true" />
+            </key>
+            <many-to-many entity-name="modele.Tblgenre">
+                <column name="NOMGENRE" length="25" not-null="true" />
+            </many-to-many>
+        </set>
+        <set name="tblrealisateurs" table="TBLFILMREALISATEUR" inverse="false" lazy="true" fetch="select">
+            <key>
+                <column name="IDFILM" precision="22" scale="0" not-null="true" />
+            </key>
+            <many-to-many entity-name="modele.Tblrealisateur">
+                <column name="IDREAL" precision="22" scale="0" not-null="true" />
+            </many-to-many>
+        </set>
+        <set name="tblcopies" table="TBLCOPIE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="IDFILM" precision="22" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="modele.Tblcopie" />
+        </set>
+        <set name="tblroles" table="TBLROLE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="IDFILM" precision="22" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="modele.Tblrole" />
+        </set>
+        <set name="tblpaysproductions" table="TBLFILMPAYSPRODUCTION" inverse="false" lazy="true" fetch="select">
+            <key>
+                <column name="IDFILM" precision="22" scale="0" not-null="true" />
+            </key>
+            <many-to-many entity-name="modele.Tblpaysproduction">
+                <column name="NOMPAYS" length="100" not-null="true" />
+            </many-to-many>
+        </set>
+        <set name="tblscenaristes" table="TBLFILMSCENARISTE" inverse="false" lazy="true" fetch="select">
+            <key>
+                <column name="IDFILM" precision="22" scale="0" not-null="true" />
+            </key>
+            <many-to-many entity-name="modele.Tblscenariste">
+                <column name="IDSCEN" precision="22" scale="0" not-null="true" />
+            </many-to-many>
+        </set>
+    </class>
+</hibernate-mapping>

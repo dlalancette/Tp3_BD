@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-11-15 12:00:11 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="modele.Tblrole" table="TBLROLE" schema="TRD157_23">
+        <composite-id name="id" class="modele.TblroleId">
+            <key-property name="idfilm" type="big_decimal">
+                <column name="IDFILM" precision="22" scale="0" />
+            </key-property>
+            <key-property name="idacteur" type="big_decimal">
+                <column name="IDACTEUR" precision="22" scale="0" />
+            </key-property>
+            <key-property name="idperso" type="big_decimal">
+                <column name="IDPERSO" precision="22" scale="0" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="tblpersonnage" class="modele.Tblpersonnage" update="false" insert="false" fetch="select">
+            <column name="IDPERSO" precision="22" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="tblfilm" class="modele.Tblfilm" update="false" insert="false" fetch="select">
+            <column name="IDFILM" precision="22" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="tblacteur" class="modele.Tblacteur" update="false" insert="false" fetch="select">
+            <column name="IDACTEUR" precision="22" scale="0" not-null="true" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-11-15 12:00:11 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="modele.Tblacteur" table="TBLACTEUR" schema="TRD157_23">
+        <id name="idacteur" type="big_decimal">
+            <column name="IDACTEUR" precision="22" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="nomacteur" type="string">
+            <column name="NOMACTEUR" length="50" not-null="true" />
+        </property>
+        <property name="prenacteur" type="string">
+            <column name="PRENACTEUR" length="50" not-null="true" />
+        </property>
+        <property name="datenaissacteur" type="date">
+            <column name="DATENAISSACTEUR" length="7" />
+        </property>
+        <property name="lieunaissacteur" type="string">
+            <column name="LIEUNAISSACTEUR" length="100" />
+        </property>
+        <property name="bioacteur" type="string">
+            <column name="BIOACTEUR" />
+        </property>
+        <set name="tblroles" table="TBLROLE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="IDACTEUR" precision="22" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="modele.Tblrole" />
+        </set>
+    </class>
+</hibernate-mapping>

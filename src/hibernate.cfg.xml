@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE hibernate-configuration PUBLIC
-"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"-//Hibernate Configuration DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
@@ -10,20 +10,20 @@
         <property name="hibernate.connection.username">trd157_23</property>
         <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
         <property name="hibernate.search.autoregister_listeners">false</property>
-        <mapping resource="modele/hibernate/Tblforfait.hbm.xml" />
-        <mapping resource="modele/hibernate/Tblusager.hbm.xml" />
-        <mapping resource="modele/hibernate/Tblcopie.hbm.xml" />
-        <mapping resource="modele/hibernate/Tbllocation.hbm.xml" />
-        <mapping resource="modele/hibernate/Tblrole.hbm.xml" />
-        <mapping resource="modele/hibernate/Tblacteur.hbm.xml" />
-        <mapping resource="modele/hibernate/Tblscenariste.hbm.xml" />
-        <mapping resource="modele/hibernate/Tblemploye.hbm.xml" />
-        <mapping resource="modele/hibernate/Tblfilm.hbm.xml" />
-        <mapping resource="modele/hibernate/Tblrealisateur.hbm.xml" />
-        <mapping resource="modele/hibernate/Tblclient.hbm.xml" />
-        <mapping resource="modele/hibernate/Tblpaysproduction.hbm.xml" />
-        <mapping resource="modele/hibernate/Tblpersonnage.hbm.xml" />
-        <mapping resource="modele/hibernate/Tblgenre.hbm.xml" />
-        <mapping resource="modele/hibernate/VwAfficheclient.hbm.xml" />
+        <mapping resource="modele/Tblforfait.hbm.xml" />
+        <mapping resource="modele/Tblusager.hbm.xml" />
+        <mapping resource="modele/Tblcopie.hbm.xml" />
+        <mapping resource="modele/Tbllocation.hbm.xml" />
+        <mapping resource="modele/Tblrole.hbm.xml" />
+        <mapping resource="modele/Tblacteur.hbm.xml" />
+        <mapping resource="modele/Tblscenariste.hbm.xml" />
+        <mapping resource="modele/Tblemploye.hbm.xml" />
+        <mapping resource="modele/Tblfilm.hbm.xml" />
+        <mapping resource="modele/Tblrealisateur.hbm.xml" />
+        <mapping resource="modele/Tblclient.hbm.xml" />
+        <mapping resource="modele/Tblpaysproduction.hbm.xml" />
+        <mapping resource="modele/Tblpersonnage.hbm.xml" />
+        <mapping resource="modele/Tblgenre.hbm.xml" />
+        <mapping resource="modele/VwAfficheclient.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

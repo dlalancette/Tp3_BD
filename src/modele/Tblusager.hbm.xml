@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-11-15 12:00:11 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="modele.Tblusager" table="TBLUSAGER" schema="TRD157_23">
+        <id name="courrielusag" type="string">
+            <column name="COURRIELUSAG" length="100" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="tblforfait" class="modele.Tblforfait" fetch="select">
+            <column name="NOMFORFAIT" length="50" />
+        </many-to-one>
+        <property name="nomusag" type="string">
+            <column name="NOMUSAG" length="50" not-null="true" />
+        </property>
+        <property name="prenomusag" type="string">
+            <column name="PRENOMUSAG" length="50" not-null="true" />
+        </property>
+        <property name="notelusag" type="string">
+            <column name="NOTELUSAG" length="30" not-null="true" />
+        </property>
+        <property name="nociviqueusag" type="big_decimal">
+            <column name="NOCIVIQUEUSAG" precision="22" scale="0" not-null="true" />
+        </property>
+        <property name="rueusag" type="string">
+            <column name="RUEUSAG" length="100" not-null="true" />
+        </property>
+        <property name="villeusag" type="string">
+            <column name="VILLEUSAG" length="100" not-null="true" />
+        </property>
+        <property name="provinceusag" type="string">
+            <column name="PROVINCEUSAG" length="2" not-null="true" />
+        </property>
+        <property name="codeposusag" type="string">
+            <column name="CODEPOSUSAG" length="6" not-null="true" />
+        </property>
+        <property name="datenaissusag" type="date">
+            <column name="DATENAISSUSAG" length="7" not-null="true" />
+        </property>
+        <property name="passusag" type="string">
+            <column name="PASSUSAG" length="25" not-null="true" />
+        </property>
+        <set name="tblemployes" table="TBLEMPLOYE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="COURRIELUSAG" length="100" not-null="true" />
+            </key>
+            <one-to-many class="modele.Tblemploye" />
+        </set>
+        <set name="tbllocations" table="TBLLOCATION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="COURRIELUSAG" length="100" not-null="true" />
+            </key>
+            <one-to-many class="modele.Tbllocation" />
+        </set>
+        <set name="tblclients" table="TBLCLIENT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="COURRIELUSAG" length="100" not-null="true" />
+            </key>
+            <one-to-many class="modele.Tblclient" />
+        </set>
+    </class>
+</hibernate-mapping>

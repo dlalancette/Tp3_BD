@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-11-15 12:00:11 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="modele.Tblrealisateur" table="TBLREALISATEUR" schema="TRD157_23">
+        <id name="idreal" type="big_decimal">
+            <column name="IDREAL" precision="22" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="nomreal" type="string">
+            <column name="NOMREAL" length="50" not-null="true" />
+        </property>
+        <property name="prenreal" type="string">
+            <column name="PRENREAL" length="50" not-null="true" />
+        </property>
+        <property name="datenaissreal" type="date">
+            <column name="DATENAISSREAL" length="7" />
+        </property>
+        <property name="lieunaissreal" type="string">
+            <column name="LIEUNAISSREAL" length="100" />
+        </property>
+        <property name="bioreal" type="string">
+            <column name="BIOREAL" />
+        </property>
+        <set name="tblfilms" table="TBLFILMREALISATEUR" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="IDREAL" precision="22" scale="0" not-null="true" />
+            </key>
+            <many-to-many entity-name="modele.Tblfilm">
+                <column name="IDFILM" precision="22" scale="0" not-null="true" />
+            </many-to-many>
+        </set>
+    </class>
+</hibernate-mapping>
