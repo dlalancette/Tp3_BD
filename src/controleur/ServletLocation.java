@@ -15,14 +15,18 @@ public class ServletLocation extends HttpServlet
 	{
 		 String action = request.getServletPath();
 		 
-		 if(action == "/AjoutFilm")
+		 if(action.equals("/"))
+			 request.getRequestDispatcher("/login.jsp").forward(request, response);
+		 else if(action.contains("accueil"))
+			 request.getRequestDispatcher("/accueil.jsp").forward(request, response);
+		 else if(action.contains("ajoutfilm"))
 			 chargerAjoutFilm(request, response);
 		 else
-			 request.getRequestDispatcher("/login.jsp").forward(request, response);
+			 response.sendError(HttpServletResponse.SC_NOT_FOUND);
 	}
 	
-	protected void chargerAjoutFilm(HttpServletRequest request, HttpServletResponse response){
-		
+	protected void chargerAjoutFilm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.getRequestDispatcher("/ajoutfilm.jsp").forward(request, response);
 	}
 	
 	public void doPost(HttpServletRequest request, 

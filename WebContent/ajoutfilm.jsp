@@ -10,7 +10,7 @@
 	<div id="wrap">
 		<jsp:include page="menu.jsp" />
 	
-		<form id="frmAjoutFilm" role="form" action="${pageContext.request.contextPath}/AjoutFilm">
+		<form id="frmAjoutFilm" method="post" role="form" action="AjoutFilm">
 		
 		  <div class="form-group">
 		    <label for="txtTitre">Titre du film:</label>
