@@ -157,3 +157,10 @@ input[type="submit"] {
   font-weight: 700;
   color: red;
 }
+
+/* ---------- HOME FORM ---------- */
+
+.text-intro {
+	padding-left: 10%;
+	padding-top: 25px;
+}

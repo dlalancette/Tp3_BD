@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<title>Location de Films</title>
 	<link type="text/css" rel="stylesheet" 
-		  href="${pageContext.request.contextPath}/css/style.css" />
+		  href="${pageContext.request.contextPath}/css/login.css" />
 </head>
 <body>
 

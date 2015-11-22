@@ -8,9 +8,7 @@
 	<div id="wrap">
 		
 		<jsp:include page="menu.jsp" />
-		
-		<h4 class="text-intro"> Bienvenue sur le site de location en ligne #1! </h4>
-		
+	
 	</div>    
 
 </body>
