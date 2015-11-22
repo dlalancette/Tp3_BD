@@ -5,8 +5,6 @@
 	<nav id="navigation">
 		<ul id="main-menu">
 			<li><a href="${pageContext.request.contextPath}/accueil.jsp">Accueil</a></li>
-			<li><a href="${pageContext.request.contextPath}/consultation.jsp">Consultation</a></li>
-			<li><a href="${pageContext.request.contextPath}/location.jsp">Location</a></li>
 			<li class="parent">
 				<a href="">Administration</a>
 				<ul class="sub-menu">
@@ -14,6 +12,8 @@
 					<li><a href="${pageContext.request.contextPath}/retraitfilm.jsp">Retrait d'un film</a></li>
 				</ul>
 			</li>
+			<li><a href="${pageContext.request.contextPath}/consultation.jsp">Consultation</a></li>
+			<li><a href="${pageContext.request.contextPath}/location.jsp">Location</a></li>
 		</ul>
 	</nav>
 	<div class="clear"></div>
