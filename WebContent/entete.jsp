@@ -4,6 +4,9 @@
 <title>Location de films</title>
 <link rel="stylesheet" type="text/css" href="css/font-awesome.css">
 <link rel="stylesheet" type="text/css" href="css/menu.css">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-theme" rel="stylesheet">
    
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/function.js"></script>
