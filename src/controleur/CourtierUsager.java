@@ -17,7 +17,7 @@ public class CourtierUsager extends Courtier {
 		criteria.add(Restrictions.eq("courrielusag", courrielUsag));
 		criteria.add(Restrictions.eq("passusag", passUser));
 		Tblusager objUsager = (Tblusager)criteria.uniqueResult();                			  
-		
+	
 		return objUsager == null ? false : true;
 	}
 }
