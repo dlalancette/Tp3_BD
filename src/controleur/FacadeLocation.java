@@ -15,8 +15,7 @@ public class FacadeLocation {
 	}
 	
 	public boolean VerifieConnexion(String courrielUsag, String passUsag) {
-		return true;
-		//return _courtierUsager.ValidateUser(courrielUsag, passUsag);
+		return _courtierUsager.ValidateUser(courrielUsag, passUsag);
 	}
 	
 	public List ObtenirListFilm(String titre,String annee,String paysproduction,String genre,String langue,String realisateur,String acteurs)

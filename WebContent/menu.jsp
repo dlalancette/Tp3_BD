@@ -5,13 +5,6 @@
 	<nav id="navigation">
 		<ul id="main-menu">
 			<li><a href="${pageContext.request.contextPath}/accueil">Accueil</a></li>
-			<li class="parent">
-				<a href="">Administration</a>
-				<ul class="sub-menu">
-					<li><a href="${pageContext.request.contextPath}/ajoutfilm">Ajout d'un film</a></li>
-					<li><a href="${pageContext.request.contextPath}/retraitfilm">Retrait d'un film</a></li>
-				</ul>
-			</li>
 			<li><a href="${pageContext.request.contextPath}/consultation">Consultation</a></li>
 			<li><a href="${pageContext.request.contextPath}/location">Location</a></li>
 		</ul>

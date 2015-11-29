@@ -9,9 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 
 public class ServletLocation extends HttpServlet 
 {  
+	private static final long serialVersionUID = 1L;
 	FacadeLocation _facade; 
 	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+	throws ServletException, IOException 
 	{
 		 String action = request.getServletPath();
 		 
@@ -21,18 +23,27 @@ public class ServletLocation extends HttpServlet
 			 request.getRequestDispatcher("/accueil.jsp").forward(request, response);
 		 else if(action.contains("consultation"))
 			 request.getRequestDispatcher("/consultation.jsp").forward(request, response);
-		 else if(action.contains("ajoutfilm"))
-			 chargerAjoutFilm(request, response);
 		 else
 			 response.sendError(HttpServletResponse.SC_NOT_FOUND);
 	}
 	
-	protected void chargerAjoutFilm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("/ajoutfilm.jsp").forward(request, response);
+	protected void VerifierConnexion(HttpServletRequest request, HttpServletResponse response)
+	throws ServletException, IOException
+	{
+		String username = request.getParameter("Email");
+        String password = request.getParameter("Password");
+    	if (_facade.VerifieConnexion(username, password)) {
+    		//request.getSession().setAttribute("user", user);
+    		request.getRequestDispatcher("/accueil.jsp").forward(request, response);
+    	}
+    	else {
+    		request.setAttribute("error", "Authentification échouée");
+        	request.getRequestDispatcher("/login.jsp").forward(request, response);
+    	}
 	}
 	
-	protected void ObtenirFilm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	protected void ObtenirFilm(HttpServletRequest request, HttpServletResponse response) 
+	throws ServletException, IOException {
 		String titre,annee,paysproduction,langue,genre,realisateur,acteurs;
 		String[] lstacteur = null;
 		
@@ -48,28 +59,14 @@ public class ServletLocation extends HttpServlet
 		request.getRequestDispatcher("/consultation.jsp").forward(request, response);
 	}
 	
-	public void doPost(HttpServletRequest request, 
-	     HttpServletResponse response)
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException
 	{
-		String username = request.getParameter("Email");
-        String password = request.getParameter("Password");
-
         _facade = new FacadeLocation();
+        
         if(request.getServletPath().contains("consultation"))
-        	{
         	ObtenirFilm(request, response);
-        	//request.getRequestDispatcher("/consultation.jsp").forward(request, response);
-        	}
-        else{
-        	if (_facade.VerifieConnexion(username, password)) {
-        		//request.getSession().setAttribute("user", user);
-        		request.getRequestDispatcher("/accueil.jsp").forward(request, response);
-        	}
-        	else {
-        		request.setAttribute("error", "Authentification échouée");
-            	request.getRequestDispatcher("/login.jsp").forward(request, response);
-        	}
-        }
+        else
+        	VerifierConnexion(request, response);
 	}
 }
