@@ -10,6 +10,7 @@
         <property name="hibernate.connection.username">trd157_23</property>
         <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
         <property name="hibernate.search.autoregister_listeners">false</property>
+        <property name="hibernate.current_session_context_class">thread</property>
         <mapping resource="modele/Tblforfait.hbm.xml" />
         <mapping resource="modele/Tblusager.hbm.xml" />
         <mapping resource="modele/Tblcopie.hbm.xml" />

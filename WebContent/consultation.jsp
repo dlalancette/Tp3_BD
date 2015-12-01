@@ -9,7 +9,7 @@
 <body>
 <div id="wrap">
 
-<jsp:include page="menu.jsp" />
+	<jsp:include page="menu.jsp" />
 
 	<form method="POST" id="searchForm" role="form" action="consultation"> 
 	  
