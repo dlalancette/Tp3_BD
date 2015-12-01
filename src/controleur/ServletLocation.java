@@ -1,10 +1,13 @@
 package controleur;
 
-import java.io.IOException;  
+import java.io.IOException;
+import java.math.BigDecimal;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;  
 import javax.servlet.http.HttpServletRequest;  
-import javax.servlet.http.HttpServletResponse;  
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;  
 
 
 public class ServletLocation extends HttpServlet 
@@ -15,31 +18,59 @@ public class ServletLocation extends HttpServlet
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 	throws ServletException, IOException 
 	{
+		 HttpSession session = request.getSession();
 		 String action = request.getServletPath();
 		 
-		 if(action.equals("/"))
+		 if(session.getAttribute("estAuthentifie") != null &&
+			session.getAttribute("estAuthentifie") == "1") {
+			 if(action.equals("/"))
+				 request.getRequestDispatcher("/login.jsp").forward(request, response);
+			 else if(action.contains("accueil"))
+				 request.getRequestDispatcher("/accueil.jsp").forward(request, response);
+			 else if(action.contains("consultation"))
+				 request.getRequestDispatcher("/consultation.jsp").forward(request, response);
+			 else if(action.contains("location"))
+				 request.getRequestDispatcher("/location.jsp").forward(request, response);
+			 else
+				 response.sendError(HttpServletResponse.SC_NOT_FOUND);
+		 }
+		 else if(action.equals("/"))
 			 request.getRequestDispatcher("/login.jsp").forward(request, response);
-		 else if(action.contains("accueil"))
-			 request.getRequestDispatcher("/accueil.jsp").forward(request, response);
-		 else if(action.contains("consultation"))
-			 request.getRequestDispatcher("/consultation.jsp").forward(request, response);
-		 else
-			 response.sendError(HttpServletResponse.SC_NOT_FOUND);
+		 else {
+			 response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+		 }
 	}
 	
-	protected void VerifierConnexion(HttpServletRequest request, HttpServletResponse response)
+	protected void EtablirConnexion(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException
 	{
 		String username = request.getParameter("Email");
         String password = request.getParameter("Password");
+		HttpSession session = request.getSession();
+		
     	if (_facade.VerifieConnexion(username, password)) {
     		//request.getSession().setAttribute("user", user);
+            session.setAttribute("utilisateur", username);
+            session.setAttribute("estAuthentifie", "1");
     		request.getRequestDispatcher("/accueil.jsp").forward(request, response);
     	}
     	else {
+            session.setAttribute("estAuthentifie", "0");
     		request.setAttribute("error", "Authentification échouée");
         	request.getRequestDispatcher("/login.jsp").forward(request, response);
     	}
+	}
+	
+	protected void LouerFilm(HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		String titre = request.getParameter("titre").trim();
+		Object[] objFilm = (Object[]) _facade.ObtenirListFilm(titre, "", "", "", "", "", "").get(0);
+		String msg = _facade.EffectuerLocation(
+				(BigDecimal)objFilm[9], (String)session.getAttribute("utilisateur"));
+		
+		request.setAttribute("msgLocation", msg);
+		request.getRequestDispatcher("/location.jsp").forward(request, response);
 	}
 	
 	protected void ObtenirFilm(HttpServletRequest request, HttpServletResponse response) 
@@ -62,11 +93,18 @@ public class ServletLocation extends HttpServlet
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException
 	{
-        _facade = new FacadeLocation();
+		//On instancie la facade
+		//On ouvre une transaction et session avec la BD
+        _facade = new FacadeLocation(); 
         
         if(request.getServletPath().contains("consultation"))
         	ObtenirFilm(request, response);
+        else if(request.getServletPath().contains("location"))
+        	LouerFilm(request, response);
         else
-        	VerifierConnexion(request, response);
+        	EtablirConnexion(request, response);
+        
+        _facade.Close(); //On ferme la session et la transaction
+        //On commit les changements, au besoin
 	}
 }

@@ -28,6 +28,8 @@
 
         <footer class="clearfix">
         	<span class="error">${error}</span>
+        	<span> Usager: p.pears@outlook.com </span>
+       		<span> Mot de passe: password</span>
         </footer>
 		
       </form>

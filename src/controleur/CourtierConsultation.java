@@ -25,7 +25,7 @@ public class CourtierConsultation extends Courtier {
 		
 		String[] lstacteur = null;
 		
-		if(acteurs.contains(","))
+		if(acteurs != null && acteurs.contains(","))
 			lstacteur = acteurs.split(",") ;
 	
 
@@ -46,9 +46,9 @@ public class CourtierConsultation extends Courtier {
 		projList.add(Projections.property("tblrealisateurs.nomreal"));
 		projList.add(Projections.property("tblacteur.prenacteur"));
 		projList.add(Projections.property("tblacteur.nomacteur"));
+		projList.add(Projections.property("tblacteur.idfilm"));
 		
 		criteria.setProjection(projList);
-		
 		
 		if(titre.length() >= 1)
 		{
