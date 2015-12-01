@@ -34,7 +34,7 @@ public class CourtierConsultation extends Courtier {
 		criteria.createAlias("tblpaysproductions", "tblpaysproductions");
 		criteria.createAlias("tblgenres", "tblgenres");
 		criteria.createAlias("tblrealisateurs", "tblrealisateurs");
-		criteria.createAlias("tblroles.tblacteur", "tblacteur");
+		criteria.createAlias("tblroles.tblacteur", "tblacteur",Criteria.LEFT_JOIN);
 		
 		ProjectionList projList = Projections.projectionList();
 		projList.add(Projections.property("Tblfilm.titrefilm"));
@@ -63,17 +63,17 @@ public class CourtierConsultation extends Courtier {
 		
 		if(paysproduction.length() >= 1)
 		{
-			criteria.add(Restrictions.eq("tblpaysproductions.nompays", paysproduction));
+			criteria.add(Restrictions.ilike("tblpaysproductions.nompays", paysproduction));
 		}
 		
 		if(genre.length() >= 1)
 		{
-			criteria.add(Restrictions.eq("tblgenres.nomgenre", genre));
+			criteria.add(Restrictions.ilike("tblgenres.nomgenre", genre));
 		}
 		
 		if(langue.length() >= 1)
 		{
-			criteria.add(Restrictions.eq("Tblfilm.langueorigfilm", langue));
+			criteria.add(Restrictions.ilike("Tblfilm.langueorigfilm", langue));
 		}
 		
 		if(realisateur.length() >= 1)
