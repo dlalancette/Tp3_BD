@@ -9,9 +9,9 @@ import modele.HibernateUtil;
 
 public class Courtier {
 
-	protected static Session _Session;
-	protected static Transaction _Transaction;
-	protected static Connection _Connexion;
+	protected Session _Session;
+	protected Transaction _Transaction;
+	protected Connection _Connexion;
 	
 	public Courtier () {
 		_Session = HibernateUtil.getSessionFactory().openSession();
@@ -20,8 +20,12 @@ public class Courtier {
 	}
 	
 	public void Close() {
-        _Transaction.commit();
-        _Session.close();
+		if(_Transaction != null)
+			_Transaction.commit();
+		
+		if(_Session != null)
+			_Session.close();
+		
         HibernateUtil.shutdown();
 	}
 	

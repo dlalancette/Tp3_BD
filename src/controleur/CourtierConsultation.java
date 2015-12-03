@@ -18,7 +18,7 @@ import modele.*;
 public class CourtierConsultation extends Courtier {
 	
 	CourtierConsultation() {
-		
+		super();
 	}
 	
 	public List GetFilms(String titre,String annee,String paysproduction,String genre,String langue,String realisateur,String acteurs) {   
@@ -46,7 +46,7 @@ public class CourtierConsultation extends Courtier {
 		projList.add(Projections.property("tblrealisateurs.nomreal"));
 		projList.add(Projections.property("tblacteur.prenacteur"));
 		projList.add(Projections.property("tblacteur.nomacteur"));
-		projList.add(Projections.property("tblacteur.idfilm"));
+		projList.add(Projections.property("Tblfilm.idfilm"));
 		
 		criteria.setProjection(projList);
 		

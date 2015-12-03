@@ -23,8 +23,10 @@ public class ServletLocation extends HttpServlet
 		 
 		 if(session.getAttribute("estAuthentifie") != null &&
 			session.getAttribute("estAuthentifie") == "1") {
-			 if(action.equals("/"))
+			 if(action.equals("/")){
+				 session.invalidate();
 				 request.getRequestDispatcher("/login.jsp").forward(request, response);
+			 }
 			 else if(action.contains("accueil"))
 				 request.getRequestDispatcher("/accueil.jsp").forward(request, response);
 			 else if(action.contains("consultation"))
@@ -49,7 +51,6 @@ public class ServletLocation extends HttpServlet
 		HttpSession session = request.getSession();
 		
     	if (_facade.VerifieConnexion(username, password)) {
-    		//request.getSession().setAttribute("user", user);
             session.setAttribute("utilisateur", username);
             session.setAttribute("estAuthentifie", "1");
     		request.getRequestDispatcher("/accueil.jsp").forward(request, response);
@@ -96,15 +97,21 @@ public class ServletLocation extends HttpServlet
 		//On instancie la facade
 		//On ouvre une transaction et session avec la BD
         _facade = new FacadeLocation(); 
-        
-        if(request.getServletPath().contains("consultation"))
-        	ObtenirFilm(request, response);
-        else if(request.getServletPath().contains("location"))
-        	LouerFilm(request, response);
-        else
-        	EtablirConnexion(request, response);
-        
-        _facade.Close(); //On ferme la session et la transaction
-        //On commit les changements, au besoin
+	        
+		try{
+	        if(request.getServletPath().contains("consultation"))
+	        	ObtenirFilm(request, response);
+	        else if(request.getServletPath().contains("location"))
+	        	LouerFilm(request, response);
+	        else
+	        	EtablirConnexion(request, response);
+	        
+	        _facade.Close(); //On ferme la session et la transaction
+	        //On commit les changements, au besoin
+		}
+		catch(Exception ex){
+			_facade.Close();
+			response.sendError(500, ex.getMessage());
+		}
 	}
 }

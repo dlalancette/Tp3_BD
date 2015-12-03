@@ -9,7 +9,7 @@ import modele.*;
 public class CourtierUsager extends Courtier {
 	
 	CourtierUsager() {
-		
+		super();
 	}
 	
 	public boolean ValidateUser(String courrielUsag, String passUser) {
