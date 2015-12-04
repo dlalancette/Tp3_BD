@@ -2,6 +2,7 @@ package controleur;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.ParseException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;  
@@ -63,7 +64,7 @@ public class ServletLocation extends HttpServlet
 	}
 	
 	protected void LouerFilm(HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException {
+			throws ServletException, IOException, ParseException {
 		HttpSession session = request.getSession();
 		String titre = request.getParameter("titre").trim();
 		Object[] objFilm = (Object[]) _facade.ObtenirListFilm(titre, "", "", "", "", "", "").get(0);
@@ -75,7 +76,7 @@ public class ServletLocation extends HttpServlet
 	}
 	
 	protected void ObtenirFilm(HttpServletRequest request, HttpServletResponse response) 
-	throws ServletException, IOException {
+	throws ServletException, IOException, ParseException {
 		String titre,annee,paysproduction,langue,genre,realisateur,acteurs;
 		String[] lstacteur = null;
 		
@@ -100,10 +101,21 @@ public class ServletLocation extends HttpServlet
 	        
 		try{
 	        if(request.getServletPath().contains("consultation"))
+			try {
 	        	ObtenirFilm(request, response);
-	        else if(request.getServletPath().contains("location"))
-	        	LouerFilm(request, response);
-	        else
+        	ObtenirFilm(request, response);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        else if(request.getServletPath().contains("location"))
+			try {
+        	LouerFilm(request, response);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        else
 	        	EtablirConnexion(request, response);
 	        
 	        _facade.Close(); //On ferme la session et la transaction
@@ -113,5 +125,9 @@ public class ServletLocation extends HttpServlet
 			_facade.Close();
 			response.sendError(500, ex.getMessage());
 		}
+        	EtablirConnexion(request, response);
+        
+        _facade.Close(); //On ferme la session et la transaction
+        //On commit les changements, au besoin
 	}
 }
