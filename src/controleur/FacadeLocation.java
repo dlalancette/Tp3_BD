@@ -1,6 +1,7 @@
 package controleur;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.List;
 
 public class FacadeLocation {
@@ -21,7 +22,7 @@ public class FacadeLocation {
 		return _courtierUsager.ValidateUser(courrielUsag, passUsag);
 	}
 	
-	public List ObtenirListFilm(String titre,String annee,String paysproduction,String genre,String langue,String realisateur,String acteurs)
+	public List ObtenirListFilm(String titre,String annee,String paysproduction,String genre,String langue,String realisateur,String acteurs) throws ParseException
 	{
 		return _courtierConsultation.GetFilms(titre,annee,paysproduction,genre,langue,realisateur,acteurs);
 	}

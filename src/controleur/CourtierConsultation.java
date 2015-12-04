@@ -2,11 +2,16 @@ package controleur;
 
 import java.math.BigDecimal;
 import java.sql.Array;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import org.hibernate.*;
@@ -25,7 +30,7 @@ public class CourtierConsultation extends Courtier {
 		
 	}
 	
-	public List GetFilms(String titre,String annee,String paysproduction,String genre,String langue,String realisateur,String acteurs) {   
+	public List GetFilms(String titre,String annee,String paysproduction,String genre,String langue,String realisateur,String acteurs) throws ParseException {   
 		
 		String[] lstacteur = null;
 		
@@ -47,8 +52,8 @@ public class CourtierConsultation extends Courtier {
 		projList.add(Projections.property("tblgenres.nomgenre"));
 		projList.add(Projections.property("tblrealisateurs.prenreal"));
 		projList.add(Projections.property("tblrealisateurs.nomreal"));
-		//projList.add(Projections.property("tblgenres.idgenre"));
-		//projList.add(Projections.property("tblrealisateurs.idreal"));
+		//Cette ligne sera modifier pour mettre les acteurs manuellement
+		projList.add(Projections.property("tblrealisateurs.idreal"));
 		
 		criteria.setProjection(projList);
 		
@@ -60,8 +65,10 @@ public class CourtierConsultation extends Courtier {
 		
 		if(annee.length() >= 1)
 		{		
-			criteria.add(Restrictions.le("Tblfilm.datesortiefilm", toEndOfYear(Integer.valueOf(annee))));
-			criteria.add(Restrictions.ge("Tblfilm.datesortiefilm", toEndOfYear(Integer.valueOf(annee))));
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			Date date = formatter.parse(annee);
+			criteria.add(Restrictions.eq("Tblfilm.datesortiefilm", date));
+			//criteria.add(Restrictions.ge("Tblfilm.datesortiefilm", date));
 		}
 		
 		if(paysproduction.length() >= 1)
@@ -82,63 +89,50 @@ public class CourtierConsultation extends Courtier {
 		if(realisateur.length() >= 1)
 		{
 			Criterion c1 = Restrictions.ilike("tblrealisateurs.nomreal", realisateur);
-			Criterion c2 = Restrictions.ilike("ßßtblrealisateurs.prenreal", realisateur);
+			Criterion c2 = Restrictions.ilike("tblrealisateurs.prenreal", realisateur);
 			Criterion or = Restrictions.or(c1,c2);			
 			criteria.add(or);
 		}
-		
-		//if(acteurs.length() >= 1)
-		//{
-		//	for(String acteur : lstacteur)
-		//		{
-		//			Criterion c1 = Restrictions.ilike("tblacteur.prenacteur", acteur);
-		//			Criterion c2 = Restrictions.ilike("tblacteur.nomacteur", acteur);
-		//			Criterion or = Restrictions.or(c1,c2);			
-		//			criteria.add(or);
-		//		}
-		//}
-		
+		//Ce qui suit permet d'ajouter les acteurs sur seulement une ligne
+		//c'est un moyen un peu détourné et pas optimiser afin de les obtenirs
 		List listFilms = criteria.list();
 		String listeNomActeurs = "";
 		String listePrenomActeurs = "";
 		
 		Object[] arrayFilm =  listFilms.toArray(); 
 		
+		listeNomActeurs = "";
+		listePrenomActeurs = "";
 
+		Criteria criteria2 = _Session.createCriteria(Tblacteur.class,"Tblacteur");
+			
+		List<Tblacteur> lstActeurs  = criteria2.list(); 
+
+		for(int i = 0 ; i < arrayFilm.length ; i++)
+		{
+				
+			Object[] film = (Object[]) arrayFilm[i];
+			BigDecimal idFilm =  (BigDecimal)film[0];
+			
 			listeNomActeurs = "";
 			listePrenomActeurs = "";
-
-			Criteria criteria2 = _Session.createCriteria(Tblacteur.class,"Tblacteur");
-			
-			List<Tblacteur> lstActeurs  = criteria2.list(); 
-			
-
-			for(int i = 0 ; i < arrayFilm.length ; i++)
+			for(int nbrActeur=0;nbrActeur < lstActeurs.size();nbrActeur++)
 			{
-				
-				Object[] film = (Object[]) arrayFilm[i];
-				BigDecimal idFilm =  (BigDecimal)film[0];
+				Set<Tblrole> setTblRoles = lstActeurs.get(nbrActeur).getTblroles();
 			
-				listeNomActeurs = "";
-				listePrenomActeurs = "";
-				for(int nbrActeur=0;nbrActeur < lstActeurs.size();nbrActeur++)
+				for (Iterator<Tblrole> it = setTblRoles.iterator(); it.hasNext();)
 				{
-					Set<Tblrole> setTblRoles = lstActeurs.get(nbrActeur).getTblroles();
-			
-					for (Iterator<Tblrole> it = setTblRoles.iterator(); it.hasNext();)
+					Tblrole tblrole = it.next();
+					if (tblrole.getTblfilm().getIdfilm().equals(idFilm))
 					{
-						Tblrole tblrole = it.next();
-						if (tblrole.getTblfilm().getIdfilm().equals(idFilm))
-						{
-							listeNomActeurs = listeNomActeurs +  lstActeurs.get(nbrActeur).getNomacteur() + ", " + lstActeurs.get(nbrActeur).getPrenacteur() + ";";
-						}
+						listeNomActeurs = listeNomActeurs +  lstActeurs.get(nbrActeur).getNomacteur() + ", " + lstActeurs.get(nbrActeur).getPrenacteur() + ";";
 					}
 				}
-				Object[] objFilm = new Object[8];
-				objFilm = (Object[]) listFilms.get(i);
-				objFilm[8] = listeNomActeurs;
-				listFilms.set(i, (Object[])objFilm);
 			}
+			Object[] objFilm = (Object[]) listFilms.get(i);
+			objFilm[8] = listeNomActeurs;
+			listFilms.set(i, (Object[])objFilm);
+		}
 		
 		return listFilms;
 	}
