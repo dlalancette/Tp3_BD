@@ -68,9 +68,6 @@
 		    <c:forEach var="film" items="${TblFilm}">
 	    <tr>
 	        <td>
-	            <c:out value="${film[0]}" />
-	        </td>
-	        <td>
 	            <c:out value="${film[1]}" />
 	        </td>
 	        <td>
@@ -83,10 +80,13 @@
 	            <c:out value="${film[4]}" />
 	        </td>
 	        <td>
-	            <c:out value="${film[5]} ${film[6]} " />
+	            <c:out value="${film[5]}" />
 	        </td>
 	        <td>
-	            <c:out value="${film[7]} ${film[8]}" />
+	            <c:out value="${film[6]} ${film[7]} " />
+	        </td>
+	        <td>
+	            <c:out value="${film[8]}" />
 	        </td>
 	    </tr>
 	    </c:forEach>
