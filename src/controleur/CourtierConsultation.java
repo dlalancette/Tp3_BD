@@ -1,9 +1,13 @@
 package controleur;
 
 import java.math.BigDecimal;
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.*;
 import org.hibernate.criterion.Criterion;
@@ -29,14 +33,13 @@ public class CourtierConsultation extends Courtier {
 			lstacteur = acteurs.split(",") ;
 	
 
-		Criteria criteria = _Session.createCriteria(Tblfilm.class,"Tblfilm");
-		criteria.createAlias("tblroles","tblroles");
+		Criteria criteria = _Session.createCriteria(Tblfilm.class,"Tblfilm");	
 		criteria.createAlias("tblpaysproductions", "tblpaysproductions");
 		criteria.createAlias("tblgenres", "tblgenres");
 		criteria.createAlias("tblrealisateurs", "tblrealisateurs");
-		criteria.createAlias("tblroles.tblacteur", "tblacteur",Criteria.LEFT_JOIN);
 		
 		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.property("Tblfilm.idfilm"));
 		projList.add(Projections.property("Tblfilm.titrefilm"));
 		projList.add(Projections.property("Tblfilm.datesortiefilm"));
 		projList.add(Projections.property("tblpaysproductions.nompays"));
@@ -44,11 +47,11 @@ public class CourtierConsultation extends Courtier {
 		projList.add(Projections.property("tblgenres.nomgenre"));
 		projList.add(Projections.property("tblrealisateurs.prenreal"));
 		projList.add(Projections.property("tblrealisateurs.nomreal"));
-		projList.add(Projections.property("tblacteur.prenacteur"));
-		projList.add(Projections.property("tblacteur.nomacteur"));
-		projList.add(Projections.property("tblacteur.idfilm"));
+		//projList.add(Projections.property("tblgenres.idgenre"));
+		//projList.add(Projections.property("tblrealisateurs.idreal"));
 		
 		criteria.setProjection(projList);
+		
 		
 		if(titre.length() >= 1)
 		{
@@ -79,23 +82,65 @@ public class CourtierConsultation extends Courtier {
 		if(realisateur.length() >= 1)
 		{
 			Criterion c1 = Restrictions.ilike("tblrealisateurs.nomreal", realisateur);
-			Criterion c2 = Restrictions.ilike("tblrealisateurs.prenreal", realisateur);
+			Criterion c2 = Restrictions.ilike("ßßtblrealisateurs.prenreal", realisateur);
 			Criterion or = Restrictions.or(c1,c2);			
 			criteria.add(or);
 		}
 		
-		if(acteurs.length() >= 1)
-		{
-			for(String acteur : lstacteur)
-				{
-					Criterion c1 = Restrictions.ilike("tblacteur.prenacteur", acteur);
-					Criterion c2 = Restrictions.ilike("tblacteur.nomacteur", acteur);
-					Criterion or = Restrictions.or(c1,c2);			
-					criteria.add(or);
-				}
-		}
+		//if(acteurs.length() >= 1)
+		//{
+		//	for(String acteur : lstacteur)
+		//		{
+		//			Criterion c1 = Restrictions.ilike("tblacteur.prenacteur", acteur);
+		//			Criterion c2 = Restrictions.ilike("tblacteur.nomacteur", acteur);
+		//			Criterion or = Restrictions.or(c1,c2);			
+		//			criteria.add(or);
+		//		}
+		//}
 		
-		return criteria.list();
+		List listFilms = criteria.list();
+		String listeNomActeurs = "";
+		String listePrenomActeurs = "";
+		
+		Object[] arrayFilm =  listFilms.toArray(); 
+		
+
+			listeNomActeurs = "";
+			listePrenomActeurs = "";
+
+			Criteria criteria2 = _Session.createCriteria(Tblacteur.class,"Tblacteur");
+			
+			List<Tblacteur> lstActeurs  = criteria2.list(); 
+			
+
+			for(int i = 0 ; i < arrayFilm.length ; i++)
+			{
+				
+				Object[] film = (Object[]) arrayFilm[i];
+				BigDecimal idFilm =  (BigDecimal)film[0];
+			
+				listeNomActeurs = "";
+				listePrenomActeurs = "";
+				for(int nbrActeur=0;nbrActeur < lstActeurs.size();nbrActeur++)
+				{
+					Set<Tblrole> setTblRoles = lstActeurs.get(nbrActeur).getTblroles();
+			
+					for (Iterator<Tblrole> it = setTblRoles.iterator(); it.hasNext();)
+					{
+						Tblrole tblrole = it.next();
+						if (tblrole.getTblfilm().getIdfilm().equals(idFilm))
+						{
+							listeNomActeurs = listeNomActeurs +  lstActeurs.get(nbrActeur).getNomacteur() + ", " + lstActeurs.get(nbrActeur).getPrenacteur() + ";";
+						}
+					}
+				}
+				Object[] objFilm = new Object[8];
+				objFilm = (Object[]) listFilms.get(i);
+				objFilm[8] = listeNomActeurs;
+				listFilms.set(i, (Object[])objFilm);
+			}
+		
+		return listFilms;
 	}
 	
 	public Date toStartOfYear(int year) {
