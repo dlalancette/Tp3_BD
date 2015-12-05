@@ -1,20 +1,15 @@
 package controleur;
 
 import java.math.BigDecimal;
-import java.sql.CallableStatement;
-import java.sql.Date;
 import java.sql.PreparedStatement;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Formatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.*;
-import org.hibernate.criterion.ProjectionList;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import modele.*;
+import modele.util.*;
 
 public class CourtierLocation extends Courtier {
 	
@@ -22,21 +17,20 @@ public class CourtierLocation extends Courtier {
 		super();
 	}
 	
-	public String effectueLocation(BigDecimal idFilm, String courrielusag) {
+	public Location effectueLocation(BigDecimal idFilm, String courrielusag) {
 		String message = "";
 		String duree = "";
+		List lstCopies = null;
+		
 		try{
+			lstCopies = otenirCopies(idFilm);
 			Tblcopie copie = obtenirCopiesDispo(idFilm);
 			
 			PreparedStatement st = _Connexion.prepareStatement("{call p_EffectuerLocation(?, ?)}");
             st.setString(1, courrielusag);
             st.setString(2, copie.getNoseriecopie());
             st.execute();
-			
-			/*CallableStatement cs = _Connexion.prepareCall(String.format(
-					"{ call p_EffectuerLocation %1s %2s }", courrielusag, copie.getNoseriecopie()));
-	
-			cs.execute();*/
+            
 			duree = obtenirDureeMax(courrielusag);
 			
 			message = String.format("Le film a été loué avec succès! \n "
@@ -44,11 +38,17 @@ public class CourtierLocation extends Courtier {
 		}
 		catch(Exception ex){
 			message = ex.getMessage();
-			return message;
+			return new Location(message, lstCopies);
 		}
 		
 		
-		return message;
+		return new Location(message, lstCopies);
+	}
+	
+	private List otenirCopies(BigDecimal idFilm){
+		Criteria criteria = _Session.createCriteria(Tblcopie.class);
+		criteria.add(Restrictions.eq("tblfilm.idfilm", idFilm));
+		return criteria.list();
 	}
 	
 	private Tblcopie obtenirCopiesDispo(BigDecimal idFilm) throws Exception {
@@ -58,7 +58,7 @@ public class CourtierLocation extends Courtier {
 		List lstCopies = criteria.list();
 		
 		if(!lstCopies.isEmpty())
-			return (Tblcopie) lstCopies.get(0);
+			return (Tblcopie)lstCopies.get(0);
 		else
 			throw new Exception("Aucune copie disponible pour ce film!");
 	}

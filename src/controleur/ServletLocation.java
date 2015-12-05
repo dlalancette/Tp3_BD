@@ -1,7 +1,6 @@
 package controleur;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.text.ParseException;
 
 import javax.servlet.ServletException;
@@ -10,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;  
 
+import modele.util.*;
 
 public class ServletLocation extends HttpServlet 
 {  
@@ -65,13 +65,12 @@ public class ServletLocation extends HttpServlet
 	
 	protected void LouerFilm(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, ParseException {
-		HttpSession session = request.getSession();
-		String titre = request.getParameter("titre").trim();
-		Object[] objFilm = (Object[]) _facade.ObtenirListFilm(titre, "", "", "", "", "", "").get(0);
-		String msg = _facade.EffectuerLocation(
-				(BigDecimal)objFilm[9], (String)session.getAttribute("utilisateur"));
+ 		HttpSession session = request.getSession();
+		Location location = _facade.EffectuerLocation(request.getParameter("titre").trim(), 
+											   (String)session.getAttribute("utilisateur"));
 		
-		request.setAttribute("msgLocation", msg);
+		request.setAttribute("msgLocation", location.getMessage());
+		request.setAttribute("TblCopies", location.getCopies());
 		request.getRequestDispatcher("/location.jsp").forward(request, response);
 	}
 	
@@ -101,31 +100,17 @@ public class ServletLocation extends HttpServlet
 	        
 		try{
 	        if(request.getServletPath().contains("consultation"))
-			try {
 	        	ObtenirFilm(request, response);
-        	ObtenirFilm(request, response);
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-        else if(request.getServletPath().contains("location"))
-			try {
-        	LouerFilm(request, response);
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-        else
+	        else if(request.getServletPath().contains("location"))
+	        	LouerFilm(request, response);
+	        else
 	        	EtablirConnexion(request, response);
-	        
-	        _facade.Close(); //On ferme la session et la transaction
-	        //On commit les changements, au besoin
 		}
 		catch(Exception ex){
 			_facade.Close();
 			response.sendError(500, ex.getMessage());
+			return;
 		}
-        	EtablirConnexion(request, response);
         
         _facade.Close(); //On ferme la session et la transaction
         //On commit les changements, au besoin
