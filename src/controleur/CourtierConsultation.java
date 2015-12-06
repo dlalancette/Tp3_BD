@@ -2,6 +2,7 @@ package controleur;
 
 import java.math.BigDecimal;
 import java.sql.Array;
+import java.text.Normalizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -16,6 +17,8 @@ import java.util.Set;
 
 import org.hibernate.*;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.LogicalExpression;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
@@ -34,14 +37,22 @@ public class CourtierConsultation extends Courtier {
 		
 		String[] lstacteur = null;
 		
+		//Génération de la liste des acteurs pour la requete.
 		if(acteurs != null && acteurs.contains(","))
-			lstacteur = acteurs.split(",") ;
-	
+			lstacteur = acteurs.trim().split(",") ;
+		else
+		{
+			lstacteur = new String[1];
+			lstacteur[0] = acteurs;
+		}
 
 		Criteria criteria = _Session.createCriteria(Tblfilm.class,"Tblfilm");	
 		criteria.createAlias("tblpaysproductions", "tblpaysproductions");
 		criteria.createAlias("tblgenres", "tblgenres");
 		criteria.createAlias("tblrealisateurs", "tblrealisateurs");
+		//Les left join ne fonctionne pas ... 
+		criteria.createAlias("tblroles", "tblroles",Criteria.LEFT_JOIN);
+		criteria.createAlias("tblroles.tblacteur", "tblacteur",Criteria.LEFT_JOIN);
 		
 		ProjectionList projList = Projections.projectionList();
 		projList.add(Projections.property("Tblfilm.idfilm"));
@@ -57,49 +68,91 @@ public class CourtierConsultation extends Courtier {
 		
 		criteria.setProjection(projList);
 		
-		
+		//Ajout des contraintes si elles ont lieu
 		if(titre.length() >= 1)
 		{
-			criteria.add(Restrictions.ilike("Tblfilm.titrefilm", titre));
+			criteria.add(Restrictions.ilike("Tblfilm.titrefilm", titre,MatchMode.ANYWHERE));
 		}
 		
 		if(annee.length() >= 1)
-		{		
+		{	//Si on a juste l'année on créer deux date soit xxxx-01-01 et xxxx-12-31 pour trouver 
+			//tous les films compris entre ces dates.
+			if(annee.length() <= 4)
+			{
+				String debutAnnee,finAnnee;
+				debutAnnee = annee + "-01-01";
+				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+				Date debutDate = formatter.parse(debutAnnee);
+				finAnnee = annee + "-12-31";
+				Date finDate = formatter.parse(finAnnee);
+				criteria.add(Restrictions.between("Tblfilm.datesortiefilm",debutDate ,finDate));
+			}
+			else {//Si on à une date complete.
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 			Date date = formatter.parse(annee);
 			criteria.add(Restrictions.eq("Tblfilm.datesortiefilm", date));
-			//criteria.add(Restrictions.ge("Tblfilm.datesortiefilm", date));
+			}
 		}
 		
 		if(paysproduction.length() >= 1)
 		{
-			criteria.add(Restrictions.ilike("tblpaysproductions.nompays", paysproduction));
+			criteria.add(Restrictions.ilike("tblpaysproductions.nompays", paysproduction,MatchMode.ANYWHERE));
 		}
 		
 		if(genre.length() >= 1)
 		{
-			criteria.add(Restrictions.ilike("tblgenres.nomgenre", genre));
+			criteria.add(Restrictions.ilike("tblgenres.nomgenre", genre,MatchMode.ANYWHERE));
 		}
 		
 		if(langue.length() >= 1)
 		{
-			criteria.add(Restrictions.ilike("Tblfilm.langueorigfilm", langue));
+			criteria.add(Restrictions.ilike("Tblfilm.langueorigfilm", langue,MatchMode.ANYWHERE));
 		}
 		
 		if(realisateur.length() >= 1)
 		{
-			Criterion c1 = Restrictions.ilike("tblrealisateurs.nomreal", realisateur);
-			Criterion c2 = Restrictions.ilike("tblrealisateurs.prenreal", realisateur);
-			Criterion or = Restrictions.or(c1,c2);			
-			criteria.add(or);
+			Criterion c1 = Restrictions.ilike("tblrealisateurs.nomreal", realisateur,MatchMode.ANYWHERE);
+			Criterion c2 = Restrictions.ilike("tblrealisateurs.prenreal", realisateur,MatchMode.ANYWHERE);		
+			LogicalExpression orExp = Restrictions.or(c1, c2);
+			criteria.add(orExp);
+		}
+		
+		if(acteurs.length() >= 1)
+		{
+			for(String acteur : lstacteur)
+			{
+				Criterion c1 = Restrictions.ilike("tblacteur.prenacteur", acteur,MatchMode.ANYWHERE);
+				Criterion c2 = Restrictions.ilike("tblacteur.nomacteur", acteur,MatchMode.ANYWHERE);		
+				LogicalExpression orExp = Restrictions.or(c1, c2);
+				criteria.add(orExp);
+			}
 		}
 		//Ce qui suit permet d'ajouter les acteurs sur seulement une ligne
 		//c'est un moyen un peu détourné et pas optimiser afin de les obtenirs
-		List listFilms = criteria.list();
+		List doublelistFilms = criteria.list();
+		List listFilms = new ArrayList<>();
+		//Retire les films en double car il était impossible de faire le left join.
+		Object[] arrayFilm =  doublelistFilms.toArray();
+		
+		for(int i = 0 ; i < arrayFilm.length ; i++)
+		{
+			if(i+1 == arrayFilm.length )
+			{
+				listFilms.add(arrayFilm[i]);
+			}
+			else
+			{
+				Object[] film1 = (Object[]) arrayFilm[i];
+				Object[] film2 = (Object[]) arrayFilm[i+1];
+				if(!film1[0].equals(film2[0]))
+				{
+					listFilms.add(film1);
+				}
+			}
+		}
+		
 		String listeNomActeurs = "";
 		String listePrenomActeurs = "";
-		
-		Object[] arrayFilm =  listFilms.toArray(); 
 		
 		listeNomActeurs = "";
 		listePrenomActeurs = "";
@@ -107,11 +160,11 @@ public class CourtierConsultation extends Courtier {
 		Criteria criteria2 = _Session.createCriteria(Tblacteur.class,"Tblacteur");
 			
 		List<Tblacteur> lstActeurs  = criteria2.list(); 
-
-		for(int i = 0 ; i < arrayFilm.length ; i++)
-		{
-				
-			Object[] film = (Object[]) arrayFilm[i];
+		//Procédure pour ajouter les acteurs manuellement: 3 boucles imbriqués qui boucle
+		//les films, les roles et les acteurs afin de les ajouter.
+		for(int i = 0 ; i < listFilms.size() ; i++)
+		{	
+			Object[] film = (Object[]) listFilms.get(i);
 			BigDecimal idFilm =  (BigDecimal)film[0];
 			
 			listeNomActeurs = "";
@@ -129,6 +182,7 @@ public class CourtierConsultation extends Courtier {
 					}
 				}
 			}
+			//On modifit l'object du film pour ajouter les acteurs et on le remet dans la liste.
 			Object[] objFilm = (Object[]) listFilms.get(i);
 			objFilm[8] = listeNomActeurs;
 			listFilms.set(i, (Object[])objFilm);
@@ -155,6 +209,13 @@ public class CourtierConsultation extends Courtier {
 	    calendar.set(Calendar.MINUTE, 0);
 	    calendar.set(Calendar.SECOND,-1);
 	    return calendar.getTime();
+	}
+	
+	public static String retireAccent(String s) 
+	{
+	    s = Normalizer.normalize(s, Normalizer.Form.NFD);
+	    s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+	    return s;
 	}
 	
 }

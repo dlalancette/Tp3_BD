@@ -88,7 +88,6 @@ public class ServletLocation extends HttpServlet
 	protected void ObtenirFilm(HttpServletRequest request, HttpServletResponse response) 
 	throws ServletException, IOException, ParseException {
 		String titre,annee,paysproduction,langue,genre,realisateur,acteurs;
-		String[] lstacteur = null;
 		
 		titre = request.getParameter("titre").trim();
 		annee = request.getParameter("annee").trim();
@@ -119,6 +118,7 @@ public class ServletLocation extends HttpServlet
 	        	EtablirConnexion(request, response);
 		}
 		catch(Exception ex){ //Si erreur on affiche un erreur 500 + exception
+			ex.printStackTrace();
 			_facade.Close();
 			response.sendError(500, ex.getMessage());
 			return;

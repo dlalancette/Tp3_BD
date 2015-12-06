@@ -19,7 +19,7 @@
 		  </div>
 		  
 		  <div class="form-group col-md-2">
-		  	<input type="text" name="annee" class="form-control" placeholder="annee">
+		  	<input type="text" name="annee" class="form-control" placeholder="annee (ex:aaaa ou aaaa-mm-dd)">
 		  </div>
 	  </div>
 	  
