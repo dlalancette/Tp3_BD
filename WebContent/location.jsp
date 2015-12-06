@@ -34,7 +34,7 @@
 	    <c:otherwise>
 	    
 	    	<div class="form-group" id="divListeCopie">
-				<h3>Liste des copies </h3> 
+				<h3>Inventaire des copies pour ce film</h3> 
 				<table class="table table-striped">
 				    <tr>
 				        <th>No. Série Copie</th>

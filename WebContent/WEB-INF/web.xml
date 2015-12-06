@@ -48,9 +48,29 @@
     <extension>css</extension>
     <mime-type>text/css</mime-type>
   </mime-mapping>
-  <error-page>
-    <!-- Forbidden directory listing -->
-    <error-code>403</error-code>
-    <location>/general-error.html</location>
-  </error-page>
+  <security-constraint>
+    <display-name>SecurityConstraint</display-name>
+    <web-resource-collection>
+       <web-resource-name>WRCollection</web-resource-name>
+       <url-pattern>/accueil.jsp</url-pattern>
+       <url-pattern>/consultation.jsp</url-pattern>
+       <url-pattern>/location.jsp</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+       <role-name>loginUser</role-name>
+    </auth-constraint>
+    <user-data-constraint>
+       <transport-guarantee>NONE</transport-guarantee>
+    </user-data-constraint>
+   </security-constraint>
+	<login-config>
+      <auth-method>FORM</auth-method>
+      <form-login-config>
+         <form-login-page>/login.jsp</form-login-page>
+         <form-error-page>/login.jsp</form-error-page>
+      </form-login-config>
+  	</login-config>
+  	<security-role>
+   	<role-name>loginUser</role-name>
+ 	</security-role>
 </web-app>
