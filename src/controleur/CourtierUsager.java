@@ -12,6 +12,7 @@ public class CourtierUsager extends Courtier {
 		super();
 	}
 	
+	//On valide si la paire usager et mot de passe est concordante
 	public boolean ValidateUser(String courrielUsag, String passUser) {
 		Criteria criteria = _Session.createCriteria(Tblusager.class);
 		criteria.add(Restrictions.eq("courrielusag", courrielUsag));
