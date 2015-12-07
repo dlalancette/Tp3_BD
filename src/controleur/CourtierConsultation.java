@@ -119,12 +119,27 @@ public class CourtierConsultation extends Courtier {
 		
 		if(acteurs.length() >= 1)
 		{
+			String prenActeur = "";
+			String nomActeur = "";
 			for(String acteur : lstacteur)
 			{
-				Criterion c1 = Restrictions.ilike("tblacteur.prenacteur", acteur,MatchMode.ANYWHERE);
-				Criterion c2 = Restrictions.ilike("tblacteur.nomacteur", acteur,MatchMode.ANYWHERE);		
-				LogicalExpression orExp = Restrictions.or(c1, c2);
-				criteria.add(orExp);
+				if(acteur.contains(" "))
+				{
+					prenActeur = acteur.substring(0,acteur.indexOf(" "));
+					nomActeur = acteur.substring(acteur.indexOf(" ") + 1 ,acteur.length());
+					Criterion c1 = Restrictions.ilike("tblacteur.prenacteur", prenActeur,MatchMode.ANYWHERE);
+					Criterion c2 = Restrictions.ilike("tblacteur.nomacteur", nomActeur,MatchMode.ANYWHERE);	
+					LogicalExpression orExp = Restrictions.or(c1, c2);
+					criteria.add(orExp);
+				}
+				else
+				{
+					Criterion c1 = Restrictions.ilike("tblacteur.prenacteur", acteur,MatchMode.ANYWHERE);
+					Criterion c2 = Restrictions.ilike("tblacteur.nomacteur", acteur,MatchMode.ANYWHERE);	
+					LogicalExpression orExp = Restrictions.or(c1, c2);
+					criteria.add(orExp);
+				}
+				
 			}
 		}
 		//Ce qui suit permet d'ajouter les acteurs sur seulement une ligne
